@@ -1,20 +1,17 @@
 package com.example.demo;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class PersonRepository {
+public interface PersonRepository extends JpaRepository<Person, Long> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    List<Person> findByCityOfLiving(String city);
 
-    public List<Person> getPersonsByCity(String city) {
-        return entityManager.createQuery("SELECT p FROM Person p WHERE p.cityOfLiving = :city", Person.class)
-                .setParameter("city", city)
-                .getResultList();
-    }
+    List<Person> findByAgeLessThanOrderByAgeAsc(int age);
+
+    Optional<Person> findByNameAndSurname(String name, String surname);
 }
